@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+import smtplib
 import os
 
 app = Flask(__name__)
@@ -214,8 +215,21 @@ def about():
     return render_template("about.html", user=current_user)
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["POST", "GET"])
 def contact():
+    if request.method == 'POST':
+        with smtplib.SMTP('smtp@gmail.com', port=587) as connection:
+            email = os.environ.get("EMAIL")
+            password = os.emviron.get("PASSWORD")
+            connection.starttls()
+            connection.login(user=email, password=password)
+            connection.sendmail(
+                from_addr=email,
+                to_addrs=email,
+                msg=f"Subject: New message!\n\nName: {request.form['name']}\nPhone: {request.form['phone']}\nEmail: {request.form['eamail']}\nMessage: {request.form['message']}"
+            )
+        return redirect(url_for('contact'))
+
     return render_template("contact.html", user=current_user)
 
 

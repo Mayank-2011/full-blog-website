@@ -22,7 +22,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI','sqlite:///posts.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI",'sqlite:///posts.db')
 db = SQLAlchemy()
 db.init_app(app)
 
@@ -220,7 +220,7 @@ def contact():
     if request.method == 'POST':
         with smtplib.SMTP('smtp@gmail.com', port=587) as connection:
             email = os.environ.get("EMAIL")
-            password = os.emviron.get("PASSWORD")
+            password = os.environ.get("PASSWORD")
             connection.starttls()
             connection.login(user=email, password=password)
             connection.sendmail(

@@ -70,6 +70,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
     parent_post = relationship("BlogPost", back_populates="comments")
 
+
 with app.app_context():
     db.create_all()
 
@@ -81,6 +82,7 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=False,
                     base_url=None)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -218,7 +220,7 @@ def about():
 @app.route("/contact", methods=["POST", "GET"])
 def contact():
     if request.method == 'POST':
-        with smtplib.SMTP('smtp@gmail.com', port=587) as connection:
+        with smtplib.SMTP('smtp.gmail.com', port=587) as connection:
             email = os.environ.get("EMAIL")
             password = os.environ.get("PASSWORD")
             connection.starttls()
@@ -226,7 +228,7 @@ def contact():
             connection.sendmail(
                 from_addr=email,
                 to_addrs=email,
-                msg=f"Subject: New message!\n\nName: {request.form['name']}\nPhone: {request.form['phone']}\nEmail: {request.form['eamail']}\nMessage: {request.form['message']}"
+                msg=f"Subject: New message!\n\nName: {request.form['name']}\nPhone: {request.form['phone']}\nEmail: {request.form['email']}\nMessage: {request.form['message']}"
             )
         return redirect(url_for('contact'))
 
